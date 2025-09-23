@@ -1,0 +1,63 @@
+create database gimnasio;
+
+use gimnasio;
+
+create table socio(
+id_socio int auto_increment primary key,
+nombre_completo varchar(40) not null,
+direccion varchar(40) not null,
+edad int(10) not null,
+genero varchar(40) not null,
+telefono varchar(12) not null,
+correo_electronico varchar(40) not null unique
+);
+
+
+create table tipo_de_documento(
+id_documento int auto_increment primary key,
+tipo_documento enum('pasaporte', 'tarjeta_de_identidad', 'cedula_de_ciudadania', 'cedula_de_extranjeria') not null,
+foreign key (id_socio) references (id_socio)
+);
+
+
+create table entrenador(
+id_entrenador int auto_increment primary key,
+nombre_completo varchar(40) not null
+);
+
+create table especialidad(
+id_especialidad int auto_increment primary key,
+cardio varchar(40) not null,
+pesas int(10) not null,
+yoga varchar(40) not null,
+foreign key (id_entrenador) references (id_entrenador)
+);
+
+create table horario_de_trabajo(
+id_horario_trabajador int auto_increment primary key,
+manana time not null,
+tarde time not null,
+noche time not null,
+foreign key (id_entrenador) references (id_entrenador)
+);
+
+create table historial_asistencias(
+id_asistencias int auto_increment primary key,
+hora_entrada_y_salida time not null,
+fecha date not null
+);
+
+create table calorias_quemadas(
+id_calorias int auto_increment primary key,
+cantidad_de_calorias int(50) not null,
+foreign key (id_socio) references (id_socio),
+foreign key (id_asistencias) references (id_asistencias)
+);
+
+create table clases_grupales(
+id_clases int auto_increment primary key,
+nombre_de_la_clase varchar(40) not null,
+cupo_maximo int(10) not null,
+horario date not null,
+duracion time not null
+);
