@@ -2,62 +2,64 @@ create database gimnasio;
 
 use gimnasio;
 
-create table socio(
-id_socio int auto_increment primary key,
+CREATE TABLE socios (
+sociosid int auto_increment primary key,
 nombre_completo varchar(40) not null,
 direccion varchar(40) not null,
 edad int(10) not null,
-genero varchar(40) not null,
+genero enum('Femenino', 'Masculino', 'Otro') not null,
 telefono varchar(12) not null,
-correo_electronico varchar(40) not null unique
+correo_electronico varchar(40) unique not null,
+documentoid int not null,
+caloriasid int not null,
+FOREIGN KEY (documentoid) REFERENCES tipo_de_documento(documentoid),
+FOREIGN KEY (caloriasid) REFERENCES calorias_quemadas(caloriasid)
 );
 
 
-create table tipo_de_documento(
-id_documento int auto_increment primary key,
-tipo_documento enum('pasaporte', 'tarjeta_de_identidad', 'cedula_de_ciudadania', 'cedula_de_extranjeria') not null,
-foreign key (id_socio) references (id_socio)
+CREATE TABLE tipo_de_documento (
+documentoid int auto_increment primary key,
+tipo_de_documento enum('Pasaporte', 'Tarjeta de identidad', 'Cedula de ciudadania', 'Cedula de extranjeria') not null
 );
 
-
-create table entrenador(
-id_entrenador int auto_increment primary key,
-nombre_completo varchar(40) not null
+create table entrenadores (
+entrenadoresid int auto_increment primary key,
+nombre_completo varchar(40) not null,
+especialidadid int not null,
+horarioid int not null,
+FOREIGN KEY (especialidadid) REFERENCES especialidad(especialidadid),
+FOREIGN KEY (horarioid) REFERENCES horario_de_trabajo(horarioid)
 );
 
-create table especialidad(
-id_especialidad int auto_increment primary key,
-cardio varchar(40) not null,
-pesas int(10) not null,
-yoga varchar(40) not null,
-foreign key (id_entrenador) references (id_entrenador)
+CREATE TABLE especialidad (
+especialidadid int auto_increment primary key,
+tipo_de_especialidad enum('cardio', 'pesas', 'yoga')
 );
 
-create table horario_de_trabajo(
-id_horario_trabajador int auto_increment primary key,
-manana time not null,
-tarde time not null,
-noche time not null,
-foreign key (id_entrenador) references (id_entrenador)
+CREATE TABLE  horario_de_trabajo (
+horarioid int auto_increment primary key,
+modalidad_de_horario enum('mañana', 'tarde', 'noche')
 );
 
-create table historial_asistencias(
-id_asistencias int auto_increment primary key,
-hora_entrada_y_salida time not null,
-fecha date not null
+CREATE TABLE historial_de_asistencia (
+asistenciaid int auto_increment primary key,
+hora_de_entrada time not null,
+hora_de_salida time not null,
+fecha date not null,
+caloriasid int not null,
+FOREIGN KEY (caloriasid) REFERENCES calorias_quemadas(caloriasid)
 );
 
-create table calorias_quemadas(
-id_calorias int auto_increment primary key,
-cantidad_de_calorias int(50) not null,
-foreign key (id_socio) references (id_socio),
-foreign key (id_asistencias) references (id_asistencias)
+CREATE TABLE calorias_quemadas (
+caloriasid int auto_increment primary key,
+cantidad_de_calorias_quemadas int(10) not null
 );
 
-create table clases_grupales(
-id_clases int auto_increment primary key,
+CREATE TABLE clases_grupales (
+clasesid int auto_increment primary key,
 nombre_de_la_clase varchar(40) not null,
 cupo_maximo int(10) not null,
-horario date not null,
-duracion time not null
+horario DATE not null,
+duracion TIME not null
 );
+
